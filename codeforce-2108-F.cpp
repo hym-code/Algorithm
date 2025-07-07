@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+
+using u64 = unsigned long long;
+using i64 = long long;
+using u32 = unsigned;
+using u128 = unsigned __int128;
+
+void solve(){
+	int n;
+	std::cin >> n;
+
+	std::vector<int> a(n);
+	for(int i = 0; i < n; i++){
+		std::cin >> a[i];
+	}
+    
+    auto check = [&](int x) {
+    	std::vector<int> d(n);
+    	for(int i = 0; i < n; i++){
+    		int need = std::max(0, x - n + i);
+    		if(i){
+    			d[i] += d[i -1];
+    		}
+    		if(d[i] < need){
+    			return false;
+    		}
+    		int len = d[i] - need + a[i];
+    		if(i + 1 < n){
+    			d[i + 1]++;
+    		}
+    		if(i + len + 1 < n){
+    			d[i + len + 1]--;
+    		}
+    	}
+    	return true;
+    };
+
+	int lo = 0, rt = n;
+	while(lo < rt){
+		int x = (lo + rt + 1) / 2;
+		if(check(x)){
+			lo = x;
+		}else{
+			rt = x - 1;
+		}
+	}
+	std::cout << lo << "\n";
+}
+
+int main(){
+	std::ios::sync_with_stdio(false);
+	std::cin.tie(nullptr);
+
+	int t;
+	std::cin >> t;
+
+	while(t--){
+		solve();
+	}
+
+	return 0;
+}
